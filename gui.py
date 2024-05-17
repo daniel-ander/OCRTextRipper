@@ -31,25 +31,26 @@ def set_tesseract_path():
 
 root = tk.Tk() # Create the root window
 
+
 set_path = tk.Button(root, text="Set Path", padx=10, pady=5, fg="white", bg="black", command=set_tesseract_path)
-set_path.pack()
+set_path.grid(row= 0, column=0, padx=10, pady=10)
 
 open_button = tk.Button(root, text="Open File", padx=10, pady=5, fg="white", bg="black", command=open_file)
-open_button.pack()
+open_button.grid(row=0, column=1, padx=10, pady=10)
 
 screenshot_button = tk.Button(root, text="Take Screenshot", padx=10, pady=5, fg="white", bg="black", command=take_screenshot)
-screenshot_button.pack()
+screenshot_button.grid(row= 1, column=1, padx=10, pady=10)
 
 apply_filters_button = tk.Button(root, text="Apply Filters", padx=10, pady=5, fg="white", bg="black", command=apply_filters)
-apply_filters_button.pack()
+apply_filters_button.grid(row= 1, column=0, padx=10, pady=10)
 
 
 
-apply_ocr = tk.Button(root, text="Save Result", padx=10, pady=5, fg="white", bg="black", command=apply_ocr)
-apply_ocr.pack()
+apply_ocr = tk.Button(root, text="Apply OCR", padx=10, pady=5, fg="white", bg="black", command=apply_ocr)
+apply_ocr.grid(row= 2, column=0, padx=10, pady=10)
 
 result_text = scrolledtext.ScrolledText(root, width=40, height=10)
-result_text.pack()
+result_text.grid(row= 2, column=1, padx=10, pady=10)
 
 root.mainloop() # Start the main loop
 
