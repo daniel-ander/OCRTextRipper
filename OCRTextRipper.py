@@ -1,71 +1,56 @@
-import pytesseract
-import pyautogui
-from PIL import Image, ImageFilter
-import cv2
-from pynput.mouse import Listener
-import time
-import os
+import tkinter as tk
+from tkinter import filedialog, Text, scrolledtext
+from ocr_code_file import OCRTextRipper
 
-# I need to create a python OCR Application Prototype that can do the following:
-# 1. Open an image from file, or take a picture of the screen. 
-# 2. Apply a greyscale filter
-# 3. Apply a binarize filter
-# 4. Apply an OCR filter
-# 5. Print the OCR result, or store it in a file, or spreadsheet format. 
+ripper = OCRTextRipper()
 
-# I would like all of this to be able to be done from the command line to start. 
-# I also need to be able to package this and deploy it as a prototype to a website. 
-
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
-class OCRTextRipper:
+def open_file():
+    filename = filedialog.askopenfilename()
+    ripper.open_file(filename)
     
-    def __init__(self):
-        self.img = None
-        self.set_tesseract_path()
+def take_screenshot():
+    ripper.take_screenshot()
 
-    def open_file(self, filename):
-        self.img = Image.open(filename)
-
-    def set_tesseract_path(self, path=r'C:\Program Files\Tesseract-OCR\tesseract.exe'):
-        if os.path.exists(path):
-            pytesseract.pytesseract.tesseract_cmd = path
-        else:
-            return "Tesseract path doesn't exist. Please set the path."
+def apply_filters():
+    ripper.apply_filters()
     
+def apply_ocr():
+    result = ripper.apply_ocr()
+    if result is not None:
+        result_text.insert(tk.INSERT, result)
 
-    def apply_filters(self):
-        if self.img is not None:
-            self.img = self.img.convert('L')
-            #self.img = self.img.filter(ImageFilter.MedianFilter(size=3))
-            self.img = self.img.point(lambda x: 0 if x < 100 else 255, '1')
-            self.img.show()
-        else:
-            error = "No image loaded!"
-            return error
+def set_tesseract_path():
+    path = filedialog.askopenfilename()
+    error = ripper.set_tesseract_path(path)
+    if error is not None:
+        result_text.insert(tk.INSERT, error)
 
-    def apply_ocr(self):
-        if self.img is not None:
-            text = pytesseract.image_to_string(self.img)
-            return text
-        else:
-            error = "No image loaded!"
-            return error
-        
-    
-    def take_screenshot(self): #help me create a simpler screenshot function
-        # Use this later to set a screens ize or something
 
-        """screen_width, screen_height = pyautogui.size()"""
-        
-        # Capture the screen image
-        screenshot = pyautogui.screenshot()
-        
-        # Set the image attribute
-        self.img = screenshot.convert('RGB')
-        
-        # Show the image
-        self.img.show()
+#------------------------------------------------------------#  
+root = tk.Tk() # Create the root window
 
-        
+logo = tk.PhotoImage(file='images/OCR_Ripper.png')
+logo = logo.subsample(2, 3)
+logo_label = tk.Label(root, image=logo)
+logo_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+
+set_path = tk.Button(root, text="Set Path", padx=10, pady=5, fg="white", bg="black", command=set_tesseract_path)
+set_path.grid(row= 1, column=0, padx=10, pady=10)
+
+open_button = tk.Button(root, text="Open File", padx=10, pady=5, fg="white", bg="black", command=open_file)
+open_button.grid(row=1, column=1, padx=10, pady=10)
+
+screenshot_button = tk.Button(root, text="Take Screenshot", padx=10, pady=5, fg="white", bg="black", command=take_screenshot)
+screenshot_button.grid(row= 2, column=0, padx=10, pady=10)
+
+apply_filters_button = tk.Button(root, text="Apply Filters", padx=10, pady=5, fg="white", bg="black", command=apply_filters)
+apply_filters_button.grid(row= 2, column=1, padx=10, pady=10)
+
+apply_ocr = tk.Button(root, text="Apply OCR", padx=10, pady=5, fg="white", bg="black", command=apply_ocr)
+apply_ocr.grid(row= 3, column=0, padx=10, pady=10)
+
+result_text = scrolledtext.ScrolledText(root, width=40, height=10)
+result_text.grid(row= 3, column=1, padx=10, pady=10)
+
+root.mainloop() # Start the main loop
 
