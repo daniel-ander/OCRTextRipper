@@ -14,6 +14,7 @@ import os
 
 #Required for next update
 #v0.2
+#--- learn how to make into a .exe file ---#
 #--- Add a function to take a screenshot of a specific area, add a way to set the dimensions for the screenshot, and a warning for the screenshot function ---#
 #--- increase the size of the window and add a box to view the image as it is being processed ---#
 #--- Add a way to set the path for the tesseract executable ---#
